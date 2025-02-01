@@ -70,21 +70,14 @@ def main():
         # print("input file: " + INPUT_FILE)
 
         frequency_dictionary: dict[str, int] = Tokenize.tokenize(
-            RANGE, LANG, SKIP, FILE_OUT, INPUT_FILE
+            RANGE, LANG, SKIP, INPUT_FILE
         )
 
-        # print(frequency_dictionary)
+        sorted_frequency_dictionary: list[tuple[str, int]] = sorted(
+            frequency_dictionary.items(), key=lambda x: x[1], reverse=True
+        )
 
-    # sorted_frequency_dictionary = sorted(
-    #     frequency_dictionary.items(), key=lambda x: x[1]
-    # )
-    # # print the results:
-    # counter = 0
-    # with open("out.txt", "w") as f:
-    #     for item in sorted_frequency_dictionary:
-    #         counter += 1
-    #         # print(f"{counter}) {item[1]}:\t{item[0]}")
-    #         f.write(f"{counter}] {item[1]}: {item[0]}\n")
+        Tokenize.write_frequency_list(sorted_frequency_dictionary, FILE_OUT)
 
 
 if __name__ == "__main__":

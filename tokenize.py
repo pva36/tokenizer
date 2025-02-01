@@ -1,4 +1,6 @@
 import re
+import os
+import sys
 
 
 class Tokenize:
@@ -7,7 +9,6 @@ class Tokenize:
         range: tuple[int, int],
         lang: str,
         skip_chars: list[str],
-        output_file: str,
         input_file: str,
     ) -> dict[str, int]:
         """
@@ -87,9 +88,10 @@ class Tokenize:
         """
         Return a string without the characters in characters.
         """
-        new_string: str
+        new_string: str = string
         for character in characters:
-            new_string = string.replace(character, "")
+            new_string = new_string.replace(character, "")
+            new_string = re.sub(r" {2,}", " ", new_string)
 
         return new_string
 
@@ -154,3 +156,36 @@ class Tokenize:
                 exception_message = "Valid arguments for the --language (-l) "
                 exception_message += "flag are: 'en', 'es', 'de', 'fr'"
                 raise Exception(exception_message)
+
+    @staticmethod
+    def write_frequency_list(
+        frequency_list: list[tuple[str, int]], file_out: str
+    ) -> None:
+        """
+        Writes the frequency list into file_out. If file_out already exists,
+        ask the user for confirmation
+        """
+        if os.path.isfile(file_out):
+            prompt = f"The file '{file_out}' already exists. Would you like to"
+            prompt += " OVERRIDE it?\n[y]es / [n]o: "
+            user_answer: str = str(input(prompt))
+            if user_answer.lower().strip() != "y":
+                print(f"The file '{file_out}' has not been modified.")
+                sys.exit()
+
+        n_tokens = len(frequency_list)
+        max_frequency = frequency_list[0][1]
+
+        index_width = len(str(n_tokens))
+        frequency_width = len(str(max_frequency))
+        counter = 0
+        with open(file_out, "w") as fout:
+            for item in frequency_list:
+                if item[0] == "":
+                    continue
+                counter += 1
+                fout.write(
+                    f"{counter:{index_width}}] {item[1]:{frequency_width}}: '{item[0]}'\n"
+                )
+
+        print(f"The file '{file_out}' has been succesfully written")
