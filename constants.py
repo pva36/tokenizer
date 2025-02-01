@@ -19,13 +19,13 @@ FRENCH_SKIP = [
 ]
 
 
-def get_chars_to_skip(language: str) -> []:
+def get_chars_to_skip(language: str) -> list[str]:
     """
     Returns an array of strings, each one containing the characters to skip
     while tokenizing the file. Accepted inputs are: 'fr'. Anything will raise
     an Exception.
     """
-    ACCEPTED_INPUT = "fr"
+    ACCEPTED_INPUT: str = "fr"
     match (language):
         case "fr":
             return FRENCH_SKIP

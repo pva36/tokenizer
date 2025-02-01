@@ -45,38 +45,29 @@ def main():
     # TOKENIZE functionality --------------------------------------------------
     if args.subcommand == "tokenize":
         # define range
+        RANGE: tuple[int, int] = (0, 0)  # default value
         if args.range:
             RANGE = Tokenize.get_range(args.range)
-        else:
-            RANGE = [0, 0]
-            # TODO: handle the case were the user provides a range outside th
+            # TODO: handle the case were the user provides a range outside the
             #       limits of the file
 
         print("range: " + f"{RANGE[0]}:{RANGE[1]}")
 
         # define language
-        LANG = Tokenize.get_language(args.language)
-        SKIP = constants.get_chars_to_skip(LANG)
+        LANG: str = Tokenize.get_language(args.language)
+        SKIP: list[str] = constants.get_chars_to_skip(LANG)
         print("language: " + LANG)
 
         # define output
+        FILE_OUT: str = "out.txt"
         if args.output:
             FILE_OUT = args.output
-        else:
-            FILE_OUT = "out.txt"
 
         print("output file: " + FILE_OUT)
 
         # define input
-        INPUT_FILE = args.input_file
+        INPUT_FILE: str = args.input_file
         print("input file: " + INPUT_FILE)
-
-    # user defined CONSTANTS --------------------------------------------------
-    # TODO: implement dynamic definition of constants
-    # START_LINE = "*** START"
-    # END_LINE = '*** END'
-    # END_LINE = "II.\n"
-    # SKIP = constants.FRENCH_SKIP
 
     # PROGRAM -----------------------------------------------------------------
     # with open("book.txt", "r") as b:

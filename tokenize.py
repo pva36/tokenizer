@@ -3,7 +3,17 @@ import re
 
 class Tokenize:
     @staticmethod
-    def get_range(range: str) -> list:
+    def tokenize(
+        range: tuple[int, int],
+        lang: str,
+        skip_chars: list[str],
+        output_file: str,
+        input_file: str,
+    ):
+        pass
+
+    @staticmethod
+    def get_range(range: str) -> tuple[int, int]:
         """
         Return a list of length 2, containing two integer values (the first and
         last line to consider by the 'tokenize subcommand')
@@ -15,13 +25,13 @@ class Tokenize:
             raise Exception(exception_message)
 
         else:
-            range = range.split(":")
-            range[0] = int(range[0])
-            range[1] = int(range[1])
+            range_list: list[str] = range.split(":")
+            start: int = int(range_list[0])
+            end: int = int(range_list[1])
             # TODO: Check that first value is less than second. Rise exception
             #       otherwise
             # TODO: Check that values aren't 0. Rise exception otherwise
-            return range
+            return start, end
 
     @staticmethod
     def get_language(language: str) -> str:
