@@ -10,27 +10,69 @@ class Tokenize:
         output_file: str,
         input_file: str,
     ):
-        pass
+        """
+        Main function of the class.
+        """
+        # TODO: define the return type of the function
+        with open(input_file) as fin:
+            lines: list[str] = fin.readlines()
+        print(len(lines))
+
+        Tokenize._check_range(range, len(lines))
+
+        tokens: list[str] = _get_tokens()
+
+    @staticmethod
+    def _get_tokens(
+        lines: list[str], range: tuple[int, int], skip_chars: list[str]
+    ) -> list[str]:
+        """
+        Returns a list containing all the tokens in the list of lines provided,
+        deleting from it any character in skip_chars.
+        """
+        line_counter: int = 0
+        tokens: list[str] = []
+
+    @staticmethod
+    def _check_range(range: tuple[int, int], fin_lines: int) -> bool:
+        """
+        Checks whether the range provided by the user is is valid. If not, an
+        Exception is raised. Else, return True.
+        """
+        if (range[1] > fin_lines) or (range[0] > fin_lines):
+            raise Exception(
+                "The range provided exceeds the range of the input file: "
+                + f"it has {fin_lines} lines."
+            )
+        else:
+            return True
 
     @staticmethod
     def get_range(range: str) -> tuple[int, int]:
         """
-        Return a list of length 2, containing two integer values (the first and
-        last line to consider by the 'tokenize subcommand')
+        Return a tuple of length 2, containing two integer values (the first
+        and last line to consider by the 'tokenize subcommand')
         """
         if not re.match(r"^\d*:\d*$", range):
             exception_message = "Range argument must have the form "
             exception_message += "'INTEGER:INTEGER', where INTEGER is any "
-            exception_message += "integer number in decimal notation."
+            exception_message += "positive integer number in decimal notation."
             raise Exception(exception_message)
 
         else:
             range_list: list[str] = range.split(":")
             start: int = int(range_list[0])
             end: int = int(range_list[1])
-            # TODO: Check that first value is less than second. Rise exception
-            #       otherwise
-            # TODO: Check that values aren't 0. Rise exception otherwise
+
+            if (end == 0) or (start == 0):
+                raise Exception(
+                    "Neither the end nor the start of the range can have the"
+                    + " value of 0."
+                )
+            if end < start:
+                raise Exception(
+                    "The end of the range cannot be less than its start."
+                )
             return start, end
 
     @staticmethod

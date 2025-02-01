@@ -69,6 +69,7 @@ def main():
         INPUT_FILE: str = args.input_file
         print("input file: " + INPUT_FILE)
 
+        Tokenize.tokenize(RANGE, LANG, SKIP, FILE_OUT, INPUT_FILE)
     # PROGRAM -----------------------------------------------------------------
     # with open("book.txt", "r") as b:
     #     lines = b.readlines()
