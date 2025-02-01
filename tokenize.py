@@ -20,7 +20,7 @@ class Tokenize:
 
         Tokenize._check_range(range, len(lines))
 
-        tokens: list[str] = _get_tokens()
+        tokens: list[str] = Tokenize._get_tokens(lines, range, skip_chars)
 
     @staticmethod
     def _get_tokens(
@@ -32,6 +32,8 @@ class Tokenize:
         """
         line_counter: int = 0
         tokens: list[str] = []
+
+        return tokens
 
     @staticmethod
     def _check_range(range: tuple[int, int], fin_lines: int) -> bool:
