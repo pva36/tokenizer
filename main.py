@@ -40,7 +40,7 @@ def main():
 
     # parse arguments
     args = parent_parser.parse_args()
-    print(args)
+    # print(args)
 
     # TOKENIZE functionality --------------------------------------------------
     if args.subcommand == "tokenize":
@@ -51,72 +51,29 @@ def main():
             # TODO: handle the case were the user provides a range outside the
             #       limits of the file
 
-        print("range: " + f"{RANGE[0]}:{RANGE[1]}")
+        # print("range: " + f"{RANGE[0]}:{RANGE[1]}")
 
         # define language
         LANG: str = Tokenize.get_language(args.language)
         SKIP: list[str] = constants.get_chars_to_skip(LANG)
-        print("language: " + LANG)
+        # print("language: " + LANG)
 
         # define output
         FILE_OUT: str = "out.txt"
         if args.output:
             FILE_OUT = args.output
 
-        print("output file: " + FILE_OUT)
+        # print("output file: " + FILE_OUT)
 
         # define input
         INPUT_FILE: str = args.input_file
-        print("input file: " + INPUT_FILE)
+        # print("input file: " + INPUT_FILE)
 
-        Tokenize.tokenize(RANGE, LANG, SKIP, FILE_OUT, INPUT_FILE)
-    # PROGRAM -----------------------------------------------------------------
-    # with open("book.txt", "r") as b:
-    #     lines = b.readlines()
+        frequency_dictionary: dict[str, int] = Tokenize.tokenize(
+            RANGE, LANG, SKIP, FILE_OUT, INPUT_FILE
+        )
 
-    # # create a list of tokens:
-    # scan = False
-    # tokens = []
-    # for line in lines:
-    #     if line.startswith(START_LINE):
-    #         scan = True
-    #         continue
-
-    #     elif line.startswith(END_LINE):
-    #         scan = False
-    #         break
-
-    #     elif scan:
-    #         line = (
-    #             line.replace(":", " ")
-    #             .replace(".", " ")
-    #             .replace('"', " ")
-    #             .replace(",", " ")
-    #             .replace("_", " ")
-    #             .replace("\n", " ")
-    #             .replace("\t", " ")
-    #             .replace(";", " ")
-    #             .replace("«", " ")
-    #             .replace("»", " ")
-    #             .replace("“", " ")
-    #             .replace("”", " ")
-    #             .replace("?", " ")
-    #             .replace("!", " ")
-    #             .replace("--", " ")
-    #             .replace("(", " ")
-    #             .replace(")", " ")
-    #         )
-    #         line_tokens = line.split(" ")
-    #         for token in line_tokens:
-    #             tokens.append(token.lower())
-
-    # # create a frequency dictionary
-    # frequency_dictionary = {}
-    # for token in tokens:
-    #     if token in frequency_dictionary.keys():
-    #         frequency_dictionary[token] += 1
-    #     else:
-    #         frequency_dictionary[token] = 1
+        # print(frequency_dictionary)
 
     # sorted_frequency_dictionary = sorted(
     #     frequency_dictionary.items(), key=lambda x: x[1]

@@ -9,18 +9,39 @@ class Tokenize:
         skip_chars: list[str],
         output_file: str,
         input_file: str,
-    ):
+    ) -> dict[str, int]:
         """
-        Main function of the class.
+        Main function of the class. Returns a dictionary where a key is a
+        token from the input file inside the range specified, and its value
+        is the occurrence frequency of that token.
         """
-        # TODO: define the return type of the function
         with open(input_file) as fin:
             lines: list[str] = fin.readlines()
-        print(len(lines))
 
         Tokenize._check_range(range, len(lines))
 
         tokens: list[str] = Tokenize._get_tokens(lines, range, skip_chars)
+
+        frequency_dictionary: dict[str, int] = Tokenize._get_frequency_dict(
+            tokens
+        )
+
+        return frequency_dictionary
+
+    @staticmethod
+    def _get_frequency_dict(tokens: list[str]) -> dict[str, int]:
+        """
+        Returns a dictionary containing the occurrence frequency of all the
+        tokens in the list provided. The key of the dictionary is the token,
+        and the value is the frequency.
+        """
+        frequency_dictionary: dict[str, int] = {}
+        for token in tokens:
+            if token in frequency_dictionary.keys():
+                frequency_dictionary[token] += 1
+            else:
+                frequency_dictionary[token] = 1
+        return frequency_dictionary
 
     @staticmethod
     def _get_tokens(
@@ -30,10 +51,47 @@ class Tokenize:
         Returns a list containing all the tokens in the list of lines provided,
         deleting from it any character in skip_chars.
         """
-        line_counter: int = 0
         tokens: list[str] = []
 
+        line_counter: int = 0
+        scan: bool = False
+        scan_all: bool = False
+
+        # if user didn't provide a range
+        if (range[0] == 0) and (range[1] == 0):
+            scan = True
+            scan_all = True
+            line_counter = 0
+
+        for line in lines:
+            line_counter += 1
+            # print("line counter: " + str(line_counter))
+            # print(line)
+            if not scan_all:
+                if line_counter == range[0]:
+                    scan = True
+                elif line_counter == (range[1] + 1):
+                    scan = False
+                    break
+            # main logic of the loop
+            if scan:
+                line = Tokenize._del_chars_from_string(line, skip_chars)
+                line_tokens: list[str] = line.split(" ")
+                for token in line_tokens:
+                    tokens.append(token.lower())
+
         return tokens
+
+    @staticmethod
+    def _del_chars_from_string(string: str, characters: list[str]) -> str:
+        """
+        Return a string without the characters in characters.
+        """
+        new_string: str
+        for character in characters:
+            new_string = string.replace(character, "")
+
+        return new_string
 
     @staticmethod
     def _check_range(range: tuple[int, int], fin_lines: int) -> bool:
