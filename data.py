@@ -12,9 +12,9 @@ class Data:
         is a string containing any of the strings stored in
         constants.SUPPORTED_LANGS.
         """
-        HOME_DIR: pathlib.Path = pathlib.Path.home()
+        # HOME_DIR: pathlib.Path = pathlib.Path.home()
         USER_DIR: pathlib.Path = Data.get_user_directory(username)
-        os.chdir(USER_DIR)
+        # os.chdir(USER_DIR)
 
         filename = f"{language}.txt"
         if not os.path.isfile(pathlib.Path(USER_DIR, filename)):
@@ -24,6 +24,23 @@ class Data:
 
         else:
             print(f"A datalist for '{language}' already exists!")
+
+    @staticmethod
+    def get_language_datalist(language: str, username: str) -> pathlib.Path:
+        """
+        Returns the path of the datalist according to username and language
+        specified. If doesn't exists, raise an exception. Assumes that language
+        and username are valid.
+        """
+        # TODO:
+        USER_DIR: pathlib.Path = Data.get_user_directory(username)
+        filename = f"{language}.txt"
+        if not os.path.isfile(pathlib.Path(USER_DIR, filename)):
+            raise Exception(
+                f"User '{username}' does not have a datalist for '{language}'"
+            )
+        else:
+            return pathlib.Path(USER_DIR, filename)
 
     @staticmethod
     def create_user_directory(username: str) -> pathlib.Path:
@@ -87,3 +104,57 @@ class Data:
 
         else:
             return USER_DIR
+
+    @staticmethod
+    def get_tokens_from_data_list(datalist_path: pathlib.Path) -> list[str]:
+        """
+        Returns a list containing all the tokens in the datalist specified.
+        """
+        with open(datalist_path, "r") as dl:
+            dl_lines = dl.readlines()
+
+        if len(dl_lines) == 0:
+            return []
+        else:
+            lines: list[str] = []
+            for line in dl_lines:
+                lines.append(line.replace("\n", ""))
+            return lines
+
+    @staticmethod
+    def update_datalist(language: str, username: str, file_input: str) -> None:
+        """
+        Updates the data list for the user and language indicated using the
+        input_file. Assumes that language if one of the options defined in
+        constants.SUPPORTED_LANGS, user_input exists and username is a valid
+        user.
+        """
+        # check the format of the input file
+
+        # get the tokens to add from the input file
+
+        # read the current datalist
+        datalist_path: pathlib.Path = Data.get_language_datalist(
+            language, username
+        )
+
+        datalist_tokens = Data.get_tokens_from_data_list(datalist_path)
+        # create a dictionary where every key is the same as the value:
+        datalist_dict: dict[str, str] = {}
+        for token in datalist_tokens:
+            datalist_dict[token] = token
+
+        # compare the current datalist with the list of tokens to add
+        test = ["hola", "buendía", "adios", "chao"]
+        for token in test:
+            try:
+                if datalist_dict[token] == token:
+                    pass
+            except KeyError:
+                datalist_dict[token] = token
+
+        print(datalist_dict)
+
+        # add the pertinent tokens
+
+        # update the current datalist

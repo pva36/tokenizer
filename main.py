@@ -3,6 +3,7 @@ import constants
 from tokenize import Tokenize
 import functions as f
 from data import Data
+import os
 
 
 def main() -> None:
@@ -67,7 +68,7 @@ def main() -> None:
 
     # parse arguments
     args = parent_parser.parse_args()
-    print(args)
+    # print(args)
 
     # TOKENIZE functionality --------------------------------------------------
     if args.subcommand == "tokenize":
@@ -101,20 +102,26 @@ def main() -> None:
     # DATA functionality ------------------------------------------------------
     if args.subcommand == "data":
         if args.data_subcommand == "create":
-            username: str = args.username.strip().lower()
-            Data.create_user_directory(username)
+            USER_NAME: str = args.username.strip().lower()
+            Data.create_user_directory(USER_NAME)
 
             if args.language:
-                # print(
-                #     f"data list for {args.language} should be created if not exists"
-
-                # )
                 LANG = f.get_language(args.language)
-                Data.create_language_data(LANG, username)
+                Data.create_language_data(LANG, USER_NAME)
 
         if args.data_subcommand == "update":
-            pass
+            USER_NAME = args.username.strip().lower()
+            LANG = f.get_language(args.language)
+
+            # TODO: maybe this should be part of a function
+            if not os.path.isfile(args.input):
+                raise Exception(
+                    "The file specified with -i / --input does not exists"
+                )
+            else:
+                UPDATE_FILE_IN = args.input
             # TODO
+            Data.update_datalist(LANG, USER_NAME, UPDATE_FILE_IN)
 
 
 if __name__ == "__main__":

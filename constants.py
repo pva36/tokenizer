@@ -1,4 +1,4 @@
-SUPPORTED_LANGS = ["fr"]
+SUPPORTED_LANGS = ["fr", "en"]
 FRENCH_SKIP = [
     ":",
     ".",
