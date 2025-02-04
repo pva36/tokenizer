@@ -137,25 +137,25 @@ class Tokenize:
                 )
             return start, end
 
-    @staticmethod
-    def get_language(language: str) -> str:
-        """
-        Return a string representing one of the languages supported by the
-        program. If the user's argument isn't valid, raise an exception.
-        """
-        match (language.strip().lower()):
-            case "en":
-                return "en"
-            case "fr":
-                return "fr"
-            case "es":
-                return "es"
-            case "de":
-                return "de"
-            case _:
-                exception_message = "Valid arguments for the --language (-l) "
-                exception_message += "flag are: 'en', 'es', 'de', 'fr'"
-                raise Exception(exception_message)
+    # @staticmethod
+    # def get_language(language: str) -> str:
+    #     """
+    #     Return a string representing one of the languages supported by the
+    #     program. If the user's argument isn't valid, raise an exception.
+    #     """
+    #     match (language.strip().lower()):
+    #         case "en":
+    #             return "en"
+    #         case "fr":
+    #             return "fr"
+    #         case "es":
+    #             return "es"
+    #         case "de":
+    #             return "de"
+    #         case _:
+    #             exception_message = "Valid arguments for the --language (-l) "
+    #             exception_message += "flag are: 'en', 'es', 'de', 'fr'"
+    #             raise Exception(exception_message)
 
     @staticmethod
     def write_frequency_list(
@@ -185,7 +185,8 @@ class Tokenize:
                     continue
                 counter += 1
                 fout.write(
-                    f"{counter:{index_width}}] {item[1]:{frequency_width}}: '{item[0]}'\n"
+                    f"{counter:{index_width}}] {item[1]:{frequency_width}}:"
+                    + " '{item[0]}'\n"
                 )
 
         print(f"The file '{file_out}' has been succesfully written")

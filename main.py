@@ -1,9 +1,10 @@
 import argparse
 import constants
 from tokenize import Tokenize
+import functions as f
 
 
-def main():
+def main() -> None:
     # implement argparse ------------------------------------------------------
     parent_parser = argparse.ArgumentParser(prog="tokenizator")
 
@@ -38,9 +39,19 @@ def main():
         "-r", "--range", help=tokenize_range_help, type=str
     )
 
+    # DATA parser
+    parser_data = subparsers.add_parser("data")
+    data_subparsers = parser_data.add_subparsers(
+        title="data subcommands", dest="data_subcommand"
+    )
+
+    # data create
+    parser_create_data = data_subparsers.add_parser("create")
+
+    parser_create_data.add_argument("-l", "--language")
     # parse arguments
     args = parent_parser.parse_args()
-    # print(args)
+    print(args)
 
     # TOKENIZE functionality --------------------------------------------------
     if args.subcommand == "tokenize":
@@ -48,26 +59,18 @@ def main():
         RANGE: tuple[int, int] = (0, 0)  # default value
         if args.range:
             RANGE = Tokenize.get_range(args.range)
-            # TODO: handle the case were the user provides a range outside the
-            #       limits of the file
-
-        # print("range: " + f"{RANGE[0]}:{RANGE[1]}")
 
         # define language
-        LANG: str = Tokenize.get_language(args.language)
+        LANG: str = f.get_language(args.language)
         SKIP: list[str] = constants.get_chars_to_skip(LANG)
-        # print("language: " + LANG)
 
         # define output
         FILE_OUT: str = "out.txt"
         if args.output:
             FILE_OUT = args.output
 
-        # print("output file: " + FILE_OUT)
-
         # define input
         INPUT_FILE: str = args.input_file
-        # print("input file: " + INPUT_FILE)
 
         frequency_dictionary: dict[str, int] = Tokenize.tokenize(
             RANGE, LANG, SKIP, INPUT_FILE
@@ -78,6 +81,11 @@ def main():
         )
 
         Tokenize.write_frequency_list(sorted_frequency_dictionary, FILE_OUT)
+
+    # DATA functionality ------------------------------------------------------
+    if args.subcommand == "data":
+        if args.data_subcommand == "create":
+            print("create data!")
 
 
 if __name__ == "__main__":

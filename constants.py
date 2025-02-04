@@ -1,3 +1,4 @@
+SUPPORTED_LANGS = ["fr"]
 FRENCH_SKIP = [
     ":",
     ".",
@@ -22,9 +23,10 @@ FRENCH_SKIP = [
 def get_chars_to_skip(language: str) -> list[str]:
     """
     Returns an array of strings, each one containing the characters to skip
-    while tokenizing the file. Accepted inputs are: 'fr'. Anything will raise
-    an Exception.
+    while tokenizing the file. Accepted inputs are: 'fr'. Anything else will
+    raise an Exception.
     """
+    # TODO: define ACCEPTED_INPUT programmatically
     ACCEPTED_INPUT: str = "fr"
     match (language):
         case "fr":
