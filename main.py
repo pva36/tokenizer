@@ -48,7 +48,22 @@ def main() -> None:
     # data create
     parser_create_data = data_subparsers.add_parser("create")
 
-    parser_create_data.add_argument("-l", "--language")
+    parser_create_data.add_argument("-l", "--language", type=str)
+    parser_create_data.add_argument(
+        "-u", "--username", required=True, type=str
+    )
+
+    # data update
+    # needed: username, language, input_file
+    parser_update_data = data_subparsers.add_parser("update")
+    parser_update_data.add_argument(
+        "-l", "--language", type=str, required=True
+    )
+    parser_update_data.add_argument(
+        "-u", "--username", type=str, required=True
+    )
+    parser_update_data.add_argument("-i", "--input", type=str, require=True)
+
     # parse arguments
     args = parent_parser.parse_args()
     print(args)
@@ -85,7 +100,12 @@ def main() -> None:
     # DATA functionality ------------------------------------------------------
     if args.subcommand == "data":
         if args.data_subcommand == "create":
-            print("create data!")
+            pass
+            # TODO
+
+        if args.data_subcommand == "update":
+            pass
+            # TODO
 
 
 if __name__ == "__main__":
