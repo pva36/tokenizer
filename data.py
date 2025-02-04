@@ -18,7 +18,7 @@ class Data:
 
         filename = f"{language}.txt"
         if not os.path.isfile(pathlib.Path(USER_DIR, filename)):
-            with open(filename, "w") as f:
+            with open(pathlib.Path(USER_DIR, filename), "w") as f:
                 f.write("")
             print(f"A datalist for '{language}' has been succesfully created!")
 
