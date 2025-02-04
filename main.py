@@ -2,6 +2,7 @@ import argparse
 import constants
 from tokenize import Tokenize
 import functions as f
+from data import Data
 
 
 def main() -> None:
@@ -62,7 +63,7 @@ def main() -> None:
     parser_update_data.add_argument(
         "-u", "--username", type=str, required=True
     )
-    parser_update_data.add_argument("-i", "--input", type=str, require=True)
+    parser_update_data.add_argument("-i", "--input", type=str, required=True)
 
     # parse arguments
     args = parent_parser.parse_args()
@@ -100,8 +101,16 @@ def main() -> None:
     # DATA functionality ------------------------------------------------------
     if args.subcommand == "data":
         if args.data_subcommand == "create":
-            pass
-            # TODO
+            username: str = args.username.strip().lower()
+            Data.create_user_directory(username)
+
+            if args.language:
+                # print(
+                #     f"data list for {args.language} should be created if not exists"
+
+                # )
+                LANG = f.get_language(args.language)
+                Data.create_language_data(LANG, username)
 
         if args.data_subcommand == "update":
             pass

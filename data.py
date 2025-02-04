@@ -5,13 +5,25 @@ import platform
 
 class Data:
     @staticmethod
-    def create_language_data(language: str) -> None:
+    def create_language_data(language: str, username: str) -> None:
         """
         Creates a data list for the language indicated. If a data list already
         exists for the language, raise an Exception. Assumes that language
         is a string containing any of the strings stored in
         constants.SUPPORTED_LANGS.
         """
+        HOME_DIR: pathlib.Path = pathlib.Path.home()
+        USER_DIR: pathlib.Path = Data.get_user_directory(username)
+        os.chdir(USER_DIR)
+
+        filename = f"{language}.txt"
+        if not os.path.isfile(pathlib.Path(USER_DIR, filename)):
+            with open(filename, "w") as f:
+                f.write("")
+            print(f"A datalist for '{language}' has been succesfully created!")
+
+        else:
+            print(f"A datalist for '{language}' already exists!")
 
     @staticmethod
     def create_user_directory(username: str) -> pathlib.Path:
