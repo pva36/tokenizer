@@ -1,6 +1,7 @@
 import pathlib
 import os
 import platform
+import re
 
 
 class Data:
@@ -32,7 +33,6 @@ class Data:
         specified. If doesn't exists, raise an exception. Assumes that language
         and username are valid.
         """
-        # TODO:
         USER_DIR: pathlib.Path = Data.get_user_directory(username)
         filename = f"{language}.txt"
         if not os.path.isfile(pathlib.Path(USER_DIR, filename)):
@@ -122,6 +122,23 @@ class Data:
             return lines
 
     @staticmethod
+    def get_tokens_to_add(file_in: str) -> list[str]:
+        """
+        Returns a list of tokens that the user doesn't need to know.
+        """
+        with open(file_in, "r") as f:
+            lines = f.readlines()
+
+        tokens_to_add: list[str] = []
+        for line in lines:
+            if "*" not in line:
+                tokens = re.sub(r" {2,}", " ", line.strip()).split(" ")
+                token = tokens[2].replace("'", "").strip()
+                tokens_to_add.append(token)
+
+        return tokens_to_add
+
+    @staticmethod
     def update_datalist(language: str, username: str, file_input: str) -> None:
         """
         Updates the data list for the user and language indicated using the
@@ -132,6 +149,7 @@ class Data:
         # check the format of the input file
 
         # get the tokens to add from the input file
+        tokens_to_add: list[str] = Data.get_tokens_to_add(file_input)
 
         # read the current datalist
         datalist_path: pathlib.Path = Data.get_language_datalist(
@@ -145,16 +163,18 @@ class Data:
             datalist_dict[token] = token
 
         # compare the current datalist with the list of tokens to add
-        test = ["hola", "buendía", "adios", "chao"]
-        for token in test:
+        # and add the pertinent tokens
+        for token in tokens_to_add:
             try:
                 if datalist_dict[token] == token:
                     pass
             except KeyError:
                 datalist_dict[token] = token
 
-        print(datalist_dict)
-
-        # add the pertinent tokens
-
         # update the current datalist
+        datalist = Data.get_language_datalist(language, username)
+        print(datalist)
+
+        with open(datalist, "w") as f:
+            for key in datalist_dict.keys():
+                f.write(f"{key}\n")
