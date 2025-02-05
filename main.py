@@ -41,6 +41,8 @@ def main() -> None:
         "-r", "--range", help=tokenize_range_help, type=str
     )
 
+    parser_tokenize.add_argument("-u", "--username", type=str)
+
     # DATA parser
     parser_data = subparsers.add_parser("data")
     data_subparsers = parser_data.add_subparsers(
@@ -97,12 +99,23 @@ def main() -> None:
             frequency_dictionary.items(), key=lambda x: x[1], reverse=True
         )
 
-        Tokenize.write_frequency_list(sorted_frequency_dictionary, FILE_OUT)
+        if args.username:
+            USER_NAME: str = args.username.strip().lower()
+            Tokenize.write_frequency_list(
+                sorted_frequency_dictionary,
+                FILE_OUT,
+                language=LANG,
+                username=USER_NAME,
+            )
+        else:
+            Tokenize.write_frequency_list(
+                sorted_frequency_dictionary, FILE_OUT
+            )
 
     # DATA functionality ------------------------------------------------------
     if args.subcommand == "data":
         if args.data_subcommand == "create":
-            USER_NAME: str = args.username.strip().lower()
+            USER_NAME = args.username.strip().lower()
             Data.create_user_directory(USER_NAME)
 
             if args.language:

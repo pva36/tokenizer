@@ -1,6 +1,9 @@
 import re
 import os
 import sys
+from typing import Union
+from data import Data
+import pathlib
 
 
 class Tokenize:
@@ -159,34 +162,61 @@ class Tokenize:
 
     @staticmethod
     def write_frequency_list(
-        frequency_list: list[tuple[str, int]], file_out: str
+        frequency_list: list[tuple[str, int]],
+        file_out: str,
+        username: Union[str, None] = None,
+        language: Union[str, None] = None,
     ) -> None:
         """
         Writes the frequency list into file_out. If file_out already exists,
         ask the user for confirmation
         """
-        if os.path.isfile(file_out):
-            prompt = f"The file '{file_out}' already exists. Would you like to"
+        WD = os.getcwd()
+        file_o = pathlib.Path(WD, file_out)
+        print(file_o)
+        if os.path.isfile(file_o):
+            prompt = f"The file '{file_o}' already exists. Would you like to"
             prompt += " OVERRIDE it?\n[y]es / [n]o: "
             user_answer: str = str(input(prompt))
             if user_answer.lower().strip() != "y":
-                print(f"The file '{file_out}' has not been modified.")
+                print(f"The file '{file_o}' has not been modified.")
                 sys.exit()
 
         n_tokens = len(frequency_list)
         max_frequency = frequency_list[0][1]
+        if (username is not None) and (language is not None):
+            datalist_path: pathlib.Path = Data.get_language_datalist(
+                language, username
+            )
+            datalist_tokens = Data.get_tokens_from_data_list(datalist_path)
+            # create a dictionary where every key is the same as the value:
+            datalist_dict: dict[str, str] = {}
+            for token in datalist_tokens:
+                datalist_dict[token] = token
 
         index_width = len(str(n_tokens))
         frequency_width = len(str(max_frequency))
         counter = 0
-        with open(file_out, "w") as fout:
+        with open(file_o, "w") as fout:
             for item in frequency_list:
                 if item[0] == "":
                     continue
+                if username is not None:
+                    # check if the token is in user's datalist
+                    try:
+                        if datalist_dict[item[0]] == item[0]:
+                            continue
+                    except KeyError:
+                        pass
+
                 counter += 1
                 fout.write(
                     f"{counter:{index_width}}] {item[1]:{frequency_width}}:"
-                    + " '{item[0]}'\n"
+                    + f" '{item[0]}'\n"
+                )
+                print(
+                    f"{counter:{index_width}}] {item[1]:{frequency_width}}:"
+                    + f" '{item[0]}'"
                 )
 
-        print(f"The file '{file_out}' has been succesfully written")
+        print(f"The file '{file_o}' has been succesfully written")
