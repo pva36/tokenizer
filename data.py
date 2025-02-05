@@ -2,6 +2,7 @@ import pathlib
 import os
 import platform
 import re
+from datetime import datetime
 
 
 class Data:
@@ -142,11 +143,12 @@ class Data:
     def update_datalist(language: str, username: str, file_input: str) -> None:
         """
         Updates the data list for the user and language indicated using the
-        input_file. Assumes that language if one of the options defined in
-        constants.SUPPORTED_LANGS, user_input exists and username is a valid
-        user.
+        input_file, and creates a backup file. Assumes that language if one of
+        the options defined in constants.SUPPORTED_LANGS, user_input exists and
+        username is a valid user.
         """
         # check the format of the input file
+        # TODO:
 
         # get the tokens to add from the input file
         tokens_to_add: list[str] = Data.get_tokens_to_add(file_input)
@@ -161,6 +163,24 @@ class Data:
         datalist_dict: dict[str, str] = {}
         for token in datalist_tokens:
             datalist_dict[token] = token
+
+        # backupfile
+        now = datetime.now()
+        user_dir = Data.get_user_directory(username)
+
+        with open(
+            pathlib.Path(
+                user_dir,
+                f"{language}_" + now.strftime("%Y-%m-%d_%Hh_%Mm_%Ss") + ".txt",
+            ),
+            "w",
+        ) as f:
+            f.write(
+                f"Backup file before update using '{file_input}', date:"
+                + f"{now.strftime('%Y-%m-%d_%Hh_%Mm_%Ss')}\n"
+            )
+            for key in datalist_dict.keys():
+                f.write(f"{key}\n")
 
         # compare the current datalist with the list of tokens to add
         # and add the pertinent tokens
