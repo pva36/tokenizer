@@ -1,9 +1,13 @@
+#!/usr/bin/python3
+
 import argparse
-import constants
-from tokenize import Tokenize
-import functions as f
-from data import Data
 import os
+import sys
+from tokenize import Tokenize
+
+import constants
+from data import Data
+import functions as f
 
 
 def main() -> None:
@@ -68,9 +72,13 @@ def main() -> None:
     )
     parser_update_data.add_argument("-i", "--input", type=str, required=True)
 
+    args: argparse.Namespace
     # parse arguments
+    if len(sys.argv[1:]) == 0:
+        parent_parser.parse_args(args=["--help"])
+        sys.exit()
+
     args = parent_parser.parse_args()
-    # print(args)
 
     # TOKENIZE functionality --------------------------------------------------
     if args.subcommand == "tokenize":

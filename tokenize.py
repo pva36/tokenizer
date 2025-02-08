@@ -69,8 +69,6 @@ class Tokenize:
 
         for line in lines:
             line_counter += 1
-            # print("line counter: " + str(line_counter))
-            # print(line)
             if not scan_all:
                 if line_counter == range[0]:
                     scan = True
@@ -173,7 +171,6 @@ class Tokenize:
         """
         WD = os.getcwd()
         file_o = pathlib.Path(WD, file_out)
-        print(file_o)
         if os.path.isfile(file_o):
             prompt = f"The file '{file_o}' already exists. Would you like to"
             prompt += " OVERRIDE it?\n[y]es / [n]o: "
@@ -214,9 +211,9 @@ class Tokenize:
                     f"{counter:{index_width}}] {item[1]:{frequency_width}}:"
                     + f" '{item[0]}'\n"
                 )
-                print(
-                    f"{counter:{index_width}}] {item[1]:{frequency_width}}:"
-                    + f" '{item[0]}'"
-                )
+                # print(
+                #     f"{counter:{index_width}}] {item[1]:{frequency_width}}:"
+                #     + f" '{item[0]}'"
+                # )
 
         print(f"The file '{file_o}' has been succesfully written")

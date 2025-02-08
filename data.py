@@ -193,7 +193,6 @@ class Data:
 
         # update the current datalist
         datalist = Data.get_language_datalist(language, username)
-        print(datalist)
 
         with open(datalist, "w") as f:
             for key in datalist_dict.keys():
